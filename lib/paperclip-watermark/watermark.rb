@@ -61,10 +61,13 @@ module Paperclip
 
       if watermark_path
         command = "composite"
-        params = %W[-gravity #{@position} #{watermark_path} #{tofile(dst)}]
-        params << tofile(dst)
+        positions = @position.split(',')
         begin
-          success = Paperclip.run(command, params.flatten.compact.collect{|e| "'#{e}'"}.join(" "))
+          positions.each do |one_position|
+            params = %W[-gravity #{@position} #{watermark_path} #{tofile(dst)}]
+            params << tofile(dst)
+            success = Paperclip.run(command, params.flatten.compact.collect{|e| "'#{e}'"}.join(" "))
+          end
         rescue Paperclip::Errors::CommandNotFoundError
           raise Paperclip::Errors::CommandNotFoundError, "There was an error processing the watermark for #{@basename}" if @whiny
         end
