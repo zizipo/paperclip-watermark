@@ -61,10 +61,11 @@ module Paperclip
 
       if watermark_path
         command = "composite"
+
         positions = @position.split(',')
         begin
           positions.each do |one_position|
-            params = %W[-gravity #{@position} #{watermark_path} #{tofile(dst)}]
+            params = %W[-gravity #{one_position} #{watermark_path} #{tofile(dst)}]
             params << tofile(dst)
             success = Paperclip.run(command, params.flatten.compact.collect{|e| "'#{e}'"}.join(" "))
           end
